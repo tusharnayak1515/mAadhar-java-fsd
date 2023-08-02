@@ -39,4 +39,8 @@ public class AadharService {
     public List<Aadhar> getAllAppliedAadharCardRequests() {
         return this.aadharRepo.findByStatus("applied");
     }
+    
+    public List<Aadhar> findAll() {
+        return this.aadharRepo.findAll();
+    }
 }
