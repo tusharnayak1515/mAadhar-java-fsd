@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent {
   public password:string = "";
   public error:string = '';
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private cookieService: CookieService, private router: Router) {}
 
   ngOnInit(): void {
     
@@ -23,6 +24,7 @@ export class LoginComponent {
       if(response.success) {
         localStorage.setItem("user", JSON.stringify(response.user));
         this.error = '';
+        this.setAuthCookie(response.token);
         this.router.navigate(['user/dashboard']);
         this.userService.setIsLoggedIn(true);
         this.userService.setUser(response.user);
@@ -33,5 +35,13 @@ export class LoginComponent {
       this.userService.setIsLoggedIn(false);
     }
     );
+  }
+
+  private setAuthCookie(token:string): void {
+    const expirationDays = 1;
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + expirationDays);
+
+    this.cookieService.set('authorization', token, expirationDate, '/');
   }
 }

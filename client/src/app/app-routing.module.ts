@@ -6,12 +6,13 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { authGuard } from './auth.guard';
 import { noAuthGuard } from './noauth.guard';
+import { adminGuard } from './admin.guard';
 
 const routes: Routes = [
   {path: '', redirectTo: "/user/dashboard", pathMatch: "full"},
   {path: 'register', component: RegisterComponent, canActivate: [noAuthGuard]},
   {path: 'login', component: LoginComponent, canActivate: [noAuthGuard]},
-  {path: 'admin/dashboard', component: AdminDashboardComponent , canActivate: [authGuard]},
+  {path: 'admin/dashboard', component: AdminDashboardComponent , canActivate: [adminGuard]},
   {path: 'user/dashboard', component: UserDashboardComponent, canActivate: [authGuard]},
 ];
 

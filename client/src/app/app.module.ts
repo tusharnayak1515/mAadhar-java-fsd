@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import {FormsModule} from "@angular/forms";
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { CookieService } from 'ngx-cookie-service';
+import { CookieInterceptor } from './cookie.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,10 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    CookieService,
+    { provide: HTTP_INTERCEPTORS, useClass: CookieInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
