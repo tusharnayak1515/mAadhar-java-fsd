@@ -9,13 +9,14 @@ public class UserResponse {
 	private String address;
 	private String gender;
 	private String role;
+	private String dp;
 	
 	public UserResponse() {
 		
 	}
 
 	public UserResponse(int citizenId, String name, String email, String mobile, String dob, String address,
-			String gender, String role) {
+			String gender, String role, String dp) {
 		super();
 		this.citizenId = citizenId;
 		this.name = name;
@@ -25,6 +26,7 @@ public class UserResponse {
 		this.address = address;
 		this.gender = gender;
 		this.role = role;
+		this.dp = dp;
 	}
 
 	public int getCitizenId() {
@@ -90,4 +92,13 @@ public class UserResponse {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	public String getDp() {
+		return dp;
+	}
+
+	public void setDp(String dp) {
+		this.dp = dp;
+	}
+	
 }

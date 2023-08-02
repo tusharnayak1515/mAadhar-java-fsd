@@ -20,16 +20,15 @@ public class User {
     private String mobile;
     private String gender;
     private String role;
+    private String dp;
     private String password;
     
     public User() {
 		
 	}
-    
-	public User(int citizenId, String name, String dob, String address, String email, String mobile, String gender,
-			String role, String password) {
-		super();
-		this.citizenId = citizenId;
+
+	public User(String name, String dob, String address, String email, String mobile, String gender, String role,
+			String dp, String password) {
 		this.name = name;
 		this.dob = dob;
 		this.address = address;
@@ -37,6 +36,7 @@ public class User {
 		this.mobile = mobile;
 		this.gender = gender;
 		this.role = role;
+		this.dp = dp;
 		this.password = password;
 	}
 
@@ -99,11 +99,19 @@ public class User {
 		this.password = password;
 	}
 
+	public String getDp() {
+		return dp;
+	}
+
+	public void setDp(String dp) {
+		this.dp = dp;
+	}
+
 	@Override
 	public String toString() {
 		return "User [citizenId=" + citizenId + ", name=" + name + ", dob=" + dob + ", address=" + address + ", email="
-				+ email + ", mobile=" + mobile + ", gender=" + gender + ", role=" + role + ", password=" + password
-				+ "]";
+				+ email + ", mobile=" + mobile + ", gender=" + gender + ", role=" + role + ", dp=" + dp + ", password="
+				+ password + "]";
 	}
 	
 }
