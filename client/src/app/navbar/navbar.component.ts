@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import User from '../models/User';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,7 @@ export class NavbarComponent implements OnInit {
   public isLoggedIn:boolean = false;
   public userType:string = "";
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private cookieService: CookieService, private router: Router) {
 
   }
 
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logoutUser() {
+    this.cookieService.set('authorization', "", new Date(), '/');
     localStorage.removeItem("user");
     this.userService.setIsLoggedIn(false);
     this.router.navigate(['login']);

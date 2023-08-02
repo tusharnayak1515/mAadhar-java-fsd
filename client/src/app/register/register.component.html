@@ -1,1 +1,209 @@
-<p>register works!</p>
+<div class="w-100 mt-5 mb-5 container">
+    <form
+      #loginForm="ngForm"
+      (ngSubmit)="loginForm?.form?.valid && onRegister()"
+      class="mx-auto"
+      style="width: 350px;"
+    >
+      <h4>Register</h4>
+      
+      <div class="my-3">
+        <label for="name" class="form-label">Name *</label>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          placeholder="Name"
+          [(ngModel)]="name"
+          required
+        />
+        <div
+          *ngIf="
+            loginForm.controls['name']?.invalid &&
+            loginForm.controls['name']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['name'].errors?.['required']"
+            class="mt-4 text-sm text-danger"
+            >Mobile is required.</span
+          >
+        </div>
+      </div>
+
+      <div class="w-100 my-3">
+        <div class="w-100 input-group mb-3">
+            <div class="w-25 input-group-append">
+              <label class="input-group-text" for="gender">Gender</label>
+            </div>
+            <select class="w-75 custom-select" id="gender" style="outline: none;" name="gender" [(ngModel)]="gender">
+              <option value="male">Male</option>
+              <option value="femmale">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        <div
+          *ngIf="
+            loginForm.controls['gender']?.invalid &&
+            loginForm.controls['gender']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['gender'].errors?.['required']"
+            class="mt-4 text-sm text-danger"
+            >Gender is required.</span
+          >
+        </div>
+      </div>
+
+      <div class="my-3">
+        <label for="dob" class="form-label">DOB *</label>
+        <input
+          type="date"
+          class="form-control"
+          name="dob"
+          id="dob"
+          placeholder="DOB"
+          [(ngModel)]="dob"
+          required
+        />
+        <div
+          *ngIf="
+            loginForm.controls['dob']?.invalid &&
+            loginForm.controls['dob']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['dob'].errors?.['required']"
+            class="mt-4 text-sm text-danger"
+            >DOB is required.</span
+          >
+        </div>
+      </div>
+
+      <div class="my-3">
+        <label for="email" class="form-label">Email *</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          placeholder="Email"
+          [(ngModel)]="email"
+          required
+        />
+        <div
+          *ngIf="
+            loginForm.controls['email']?.invalid &&
+            loginForm.controls['email']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['email'].errors?.['required']"
+            class="mt-4 text-sm text-danger"
+            >Email is required.</span
+          >
+  
+          <span
+            *ngIf="loginForm.controls['email'].errors?.['type']"
+            class="mt-4 text-sm text-danger"
+            >Enter a valid email</span
+          >
+        </div>
+      </div>
+
+      <div class="my-3">
+        <label for="address" class="form-label">Address *</label>
+        <textarea
+          class="form-control"
+          name="address"
+          id="address"
+          placeholder="Adress"
+          [(ngModel)]="address"
+          required
+        ></textarea>
+        <div
+          *ngIf="
+            loginForm.controls['address']?.invalid &&
+            loginForm.controls['address']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['address'].errors?.['required']"
+            class="mt-4 text-sm text-danger"
+            >Address is required.</span
+          >
+        </div>
+      </div>
+
+      <div class="my-3">
+        <label for="mobile" class="form-label">Mobile *</label>
+        <input
+          type="number"
+          class="form-control"
+          name="mobile"
+          id="mobile"
+          placeholder="Mobile Number"
+          [(ngModel)]="mobile"
+          required
+          minlength="10"
+          maxlength="10"
+        />
+        <div
+          *ngIf="
+            loginForm.controls['mobile']?.invalid &&
+            loginForm.controls['mobile']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['mobile'].errors?.['required']"
+            class="mt-4 text-sm text-danger"
+            >Mobile is required.</span
+          >
+  
+          <span
+            *ngIf="loginForm.controls['mobile'].errors?.['minlength'] || loginForm.controls['mobile'].errors?.['maxlength']"
+            class="mt-4 text-sm text-danger"
+            >Mobile number must be exactly 10 digits long.</span
+          >
+        </div>
+      </div>
+
+      <div class="my-3">
+        <label for="password" class="form-label">Password *</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          id="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          required
+        />
+        <div
+          *ngIf="
+            loginForm.controls['password']?.invalid &&
+            loginForm.controls['password']?.touched
+          "
+        >
+          <span
+            *ngIf="loginForm.controls['password'].errors?.['required']"
+            class="text-sm text-danger"
+            >Password is required.</span
+          >
+        </div>
+      </div>
+      <p class="w-100 text-sm text-danger text-center" *ngIf="error !== ''">
+        {{ error }}
+      </p>
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="loginForm?.form?.invalid"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+  

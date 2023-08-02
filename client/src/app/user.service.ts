@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import User from './models/User';
+import RegisterUser from './models/RegisterUser';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,14 @@ export class UserService {
       mobile,
       password,
     });
+  };
+
+  public userRegister = (user: RegisterUser): Observable<User> => {
+    return this.http.post<User>(`${this.url}/api/auth/register`, user);
+  };
+
+  public uploadDp = (dp: FormData): Observable<User> => {
+    return this.http.put<User>(`${this.url}/api/auth/upload`, dp);
   };
 
   public setIsLoggedIn(value: boolean): void {

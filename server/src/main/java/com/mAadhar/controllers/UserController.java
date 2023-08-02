@@ -94,6 +94,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request, HttpServletResponse response)
             throws Exception {
+        System.out.println("request: "+request.getPassword());
         User isUser = this.customUserDetailsService.findOne(request.getMobile());
         if (isUser != null) {
             JwtResponse myResponse = new JwtResponse();

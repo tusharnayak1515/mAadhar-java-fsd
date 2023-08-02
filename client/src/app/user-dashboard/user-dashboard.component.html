@@ -6,7 +6,32 @@
     alt="User"
     class="mb-4 rounded-circle"
     style="height: 13rem; width: 13rem"
+    *ngIf="user?.dp"
   />
+  <div
+    style="height: 13rem; width: 13rem"
+    class="mb-4 border border-secondary rounded-circle"
+    *ngIf="!user?.dp"
+  >
+    <label role="button" for="dp" class="h-100 w-100">
+      <img
+        [src]="
+          dp ||
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
+        "
+        alt="NoImg"
+        class="h-100 w-100 rounded-circle"
+      />
+    </label>
+    <input
+      type="file"
+      name="dp"
+      id="dp"
+      class="d-none"
+      (change)="onDpChange($event)"
+    />
+  </div>
+  <button class="btn btn-primary mb-4" (click)="uploadDp()" [disabled]="!file">Upload</button>
   <p class="h6">Citizen ID: {{ user?.citizenId }}</p>
   <p class="h6">Name: {{ user?.name }}</p>
   <p class="h6">Gender: {{ user?.gender }}</p>
@@ -15,32 +40,50 @@
   <p class="h6">Mobile: {{ user?.mobile }}</p>
   <p class="h6">Address: {{ user?.address }}</p>
 
-  <div class="card mt-5" style="width: 400px;" *ngIf="aadhar?.aadharNumber">
+  <div class="card mt-5" style="width: 400px" *ngIf="aadhar?.aadharNumber">
     <div class="card-body">
       <h5 class="card-title text-center">Government Of India</h5>
       <div class="w-100 d-flex justify-content-start align-items-start gap-4">
         <img [src]="aadhar?.dp" alt="User" style="height: 5rem; width: 5rem" />
         <div>
-          <p class="small h6">Name: {{aadhar?.name}}</p>
-          <p class="small h6">DOB: {{aadhar?.dob}}</p>
-          <p class="small h6">Gender: {{aadhar?.gender}}</p>
+          <p class="small h6">Name: {{ aadhar?.name }}</p>
+          <p class="small h6">DOB: {{ aadhar?.dob }}</p>
+          <p class="small h6">Gender: {{ aadhar?.gender }}</p>
         </div>
       </div>
-      <div class="w-100 mt-3 mb-3 d-flex justify-content-center align-items-center border-bottom border-danger">
-        <p class="h6">{{aadhar?.aadharNumber}}</p>
+      <div
+        class="w-100 mt-3 mb-3 d-flex justify-content-center align-items-center border-bottom border-danger"
+      >
+        <p class="h6">{{ aadhar?.aadharNumber }}</p>
       </div>
 
       <p class="h6 text-center">Aadhaar is Right of Common Man</p>
     </div>
   </div>
 
-  <p class="mt-3 h6">Status: <span [ngClass]="aadhar?.status === 'approved' ? 'text-success' : 'text-warning'">{{aadhar?.status}}</span></p>
+  <p class="mt-3 h6">
+    Status:
+    <span
+      [ngClass]="
+        aadhar?.status === 'approved' ? 'text-success' : 'text-warning'
+      "
+      >{{ aadhar?.status }}</span
+    >
+  </p>
 
-  <a *ngIf="!aadhar?.aadharNumber" routerLink="#" class="mt-3 h6 text-primary text-decoration-none"
+  <a
+    *ngIf="!aadhar?.aadharNumber"
+    routerLink=""
+    class="mt-3 h6 text-primary text-decoration-none"
+    (click)="applyNewAadhar()"
     >Apply for aadhar card</a
   >
 
-  <a *ngIf="aadhar?.aadharNumber" routerLink="#" class="mt-3 h6 text-primary text-decoration-none"
+  <a
+    *ngIf="aadhar?.status === 'approved'"
+    routerLink=""
+    class="mt-3 h6 text-primary text-decoration-none"
+    (click)="applyDuplicateAadhar()"
     >Apply for duplicate aadhar card</a
   >
 </div>
