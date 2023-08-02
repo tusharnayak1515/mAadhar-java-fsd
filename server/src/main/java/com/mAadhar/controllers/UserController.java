@@ -29,7 +29,9 @@ import com.mAadhar.dto.LoginRequest;
 import com.mAadhar.dto.RegisterRequest;
 import com.mAadhar.dto.UpdateUserRequest;
 import com.mAadhar.dto.UserResponse;
+import com.mAadhar.entities.Aadhar;
 import com.mAadhar.entities.User;
+import com.mAadhar.services.AadharService;
 import com.mAadhar.services.CustomUserDetailsService;
 import com.mAadhar.utils.JwtUtil;
 
@@ -41,6 +43,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("/api/auth")
 public class UserController {
     private final CustomUserDetailsService customUserDetailsService;
+    private final AadharService aadharService;
 
     private final AuthenticationManager authenticationManager;
 
@@ -49,10 +52,11 @@ public class UserController {
     @Autowired
     public UserController(CustomUserDetailsService customUserDetailsService,
             AuthenticationManager authenticationManager,
-            JwtUtil jwtUtil) {
+            JwtUtil jwtUtil, AadharService aadharService) {
         this.customUserDetailsService = customUserDetailsService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.aadharService = aadharService;
     }
 
     @Autowired
@@ -158,8 +162,10 @@ public class UserController {
 
         user = this.customUserDetailsService.update(user);
 
-        System.out.println("user: "+user);
-        
+        Aadhar aadhar = this.aadharService.findAadharByCitizenId(user.getCitizenId());
+
+        aadhar.setStatus("pending");
+        this.aadharService.saveAadhar(aadhar);
         JwtResponse myresponse = new JwtResponse();
         UserResponse userResponse = new UserResponse(user.getCitizenId(), user.getName(), user.getEmail(),
                 user.getMobile(), user.getRole(), user.getAddress(), user.getDob(), user.getGender(), user.getDp());

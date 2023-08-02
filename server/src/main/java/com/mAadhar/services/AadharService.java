@@ -40,6 +40,10 @@ public class AadharService {
         return this.aadharRepo.findByStatus("applied");
     }
     
+    public List<Aadhar> getAllDuplicateAadharCardRequests() {
+        return this.aadharRepo.findByStatus("duplicate");
+    }
+    
     public List<Aadhar> findAll() {
         return this.aadharRepo.findAll();
     }

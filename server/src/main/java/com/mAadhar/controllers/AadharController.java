@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -124,8 +126,49 @@ public class AadharController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/duplicate")
+    public ResponseEntity<?> getDuplicateAadharRequests(HttpServletRequest request)
+            throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = this.customUserDetailsService.findOne(email);
+
+        if (!user.getRole().equalsIgnoreCase("admin")) {
+            JwtResponse myResponse = new JwtResponse();
+            myResponse.setSuccess(false);
+            myResponse.setError("Not allowed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
+        }
+
+        List<Aadhar> aadharList = this.aadharService.getAllDuplicateAadharCardRequests();
+
+        AadharList list = new AadharList();
+
+        for (Aadhar aadhar : aadharList) {
+            list.setSuccess(true);
+            list.setError(null);
+            AadharUser aadharUser = new AadharUser();
+            aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
+            aadharUser.setName(aadhar.getUser().getName());
+            aadharUser.setEmail(aadhar.getUser().getEmail());
+            aadharUser.setMobile(aadhar.getUser().getMobile());
+            aadharUser.setAddress(aadhar.getUser().getAddress());
+            aadharUser.setDob(aadhar.getUser().getDob());
+            aadharUser.setGender(aadhar.getUser().getGender());
+            aadharUser.setDp(aadhar.getUser().getDp());
+            aadharUser.setId(aadhar.getId());
+            aadharUser.setAadharNumber(aadhar.getAadharNumber());
+            aadharUser.setDuplicates(aadhar.getDuplicates());
+            aadharUser.setStatus(aadhar.getStatus());
+            aadharUser.setIssueDate(aadhar.getIssueDate());
+            list.addAadhar(aadharUser);
+        }
+
+        return ResponseEntity.ok(list);
+    }
+
     @PutMapping("/approve")
-    public ResponseEntity<?> approveRequest(@RequestBody ApproveRequest jwtRequest ,HttpServletResponse response)
+    public ResponseEntity<?> approveRequest(@RequestBody ApproveRequest jwtRequest, HttpServletResponse response)
             throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -139,13 +182,68 @@ public class AadharController {
         }
 
         Aadhar aadhar = this.aadharService.findById(jwtRequest.getAadharId());
-        if(aadhar == null) {
+        if (aadhar == null) {
             JwtResponse myResponse = new JwtResponse();
             myResponse.setSuccess(false);
             myResponse.setError("Aadhar card does not exist.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
         }
 
+        aadhar.setStatus("approved");
+
+        this.aadharService.saveAadhar(aadhar);
+
+        List<Aadhar> aadharList = this.aadharService.getAllAppliedAadharCardRequests();
+
+        AadharList list = new AadharList();
+
+        for (Aadhar item : aadharList) {
+            list.setSuccess(true);
+            list.setError(null);
+            AadharUser aadharUser = new AadharUser();
+            aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
+            aadharUser.setName(aadhar.getUser().getName());
+            aadharUser.setEmail(aadhar.getUser().getEmail());
+            aadharUser.setMobile(aadhar.getUser().getMobile());
+            aadharUser.setAddress(aadhar.getUser().getAddress());
+            aadharUser.setDob(aadhar.getUser().getDob());
+            aadharUser.setGender(aadhar.getUser().getGender());
+            aadharUser.setDp(aadhar.getUser().getDp());
+            aadharUser.setId(item.getId());
+            aadharUser.setAadharNumber(item.getAadharNumber());
+            aadharUser.setDuplicates(item.getDuplicates());
+            aadharUser.setStatus(item.getStatus());
+            aadharUser.setIssueDate(item.getIssueDate());
+            list.addAadhar(aadharUser);
+        }
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/approve-duplicate")
+    public ResponseEntity<?> approveDuplicateRequest(@RequestBody ApproveRequest jwtRequest,
+            HttpServletResponse response)
+            throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = this.customUserDetailsService.findOne(email);
+
+        if (!user.getRole().equalsIgnoreCase("admin")) {
+            JwtResponse myResponse = new JwtResponse();
+            myResponse.setSuccess(false);
+            myResponse.setError("Not allowed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
+        }
+
+        Aadhar aadhar = this.aadharService.findById(jwtRequest.getAadharId());
+        if (aadhar == null) {
+            JwtResponse myResponse = new JwtResponse();
+            myResponse.setSuccess(false);
+            myResponse.setError("Aadhar card does not exist.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
+        }
+
+        aadhar.setDuplicates(aadhar.getDuplicates()+1);
         aadhar.setStatus("approved");
 
         this.aadharService.saveAadhar(aadhar);
@@ -268,7 +366,7 @@ public class AadharController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
         }
 
-        aadhar.setDuplicates(aadhar.getDuplicates() + 1);
+        aadhar.setStatus("duplicate");
         this.aadharService.saveAadhar(aadhar);
 
         AadharResponse myresponse = new AadharResponse();
@@ -290,6 +388,44 @@ public class AadharController {
         aadharUser.setIssueDate(aadhar.getIssueDate());
         myresponse.setAadhar(aadharUser);
         return ResponseEntity.ok(myresponse);
+    }
+
+    @DeleteMapping("/{aadharId}")
+    public ResponseEntity<?> deleteAadhar(@PathVariable Long aadharId) {
+        Aadhar aadhar = aadharService.findById(aadharId);
+        if(aadhar == null) {
+            JwtResponse myResponse = new JwtResponse();
+            myResponse.setSuccess(false);
+            myResponse.setError("Aadhar card does not exist.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
+        }
+
+        this.aadharService.deleteAadhar(aadharId);
+        List<Aadhar> aadharList = this.aadharService.findAll();
+
+        AadharList list = new AadharList();
+
+        for (Aadhar item : aadharList) {
+            list.setSuccess(true);
+            list.setError(null);
+            AadharUser aadharUser = new AadharUser();
+            aadharUser.setCitizenId(item.getUser().getCitizenId());
+            aadharUser.setName(item.getUser().getName());
+            aadharUser.setEmail(item.getUser().getEmail());
+            aadharUser.setMobile(item.getUser().getMobile());
+            aadharUser.setAddress(item.getUser().getAddress());
+            aadharUser.setDob(item.getUser().getDob());
+            aadharUser.setGender(item.getUser().getGender());
+            aadharUser.setDp(item.getUser().getDp());
+            aadharUser.setId(item.getId());
+            aadharUser.setAadharNumber(item.getAadharNumber());
+            aadharUser.setDuplicates(item.getDuplicates());
+            aadharUser.setStatus(item.getStatus());
+            aadharUser.setIssueDate(item.getIssueDate());
+            list.addAadhar(aadharUser);
+        }
+
+        return ResponseEntity.ok(list);
     }
 
     public static String generateRandomAadharNumber() {
