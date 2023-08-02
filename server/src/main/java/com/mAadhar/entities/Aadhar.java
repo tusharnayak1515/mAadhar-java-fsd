@@ -16,11 +16,15 @@ public class Aadhar {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "aadhar_number", unique = true, nullable = false)
+   @Column(name = "aadhar_number", unique = true)
    private String aadharNumber;
    
    private int duplicates;
    
+   private String status;
+
+   private String issueDate;
+
    @OneToOne(cascade = CascadeType.ALL)
    private User user;
    
@@ -28,10 +32,12 @@ public class Aadhar {
    	
    }
 
-   public Aadhar(String aadharNumber, User user, int duplicates) {
+   public Aadhar(String aadharNumber, User user, int duplicates, String status, String issueDate) {
        this.aadharNumber = aadharNumber;
        this.user = user;
        this.duplicates = duplicates;
+       this.status = status;
+       this.issueDate = issueDate;
    }
 
    public User getUser() {
@@ -66,10 +72,26 @@ public class Aadhar {
 		this.duplicates = duplicates;
 	}
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(String issueDate) {
+        this.issueDate = issueDate;
+    }
+
     @Override
     public String toString() {
-        return "Aadhar [id=" + id + ", aadharNumber=" + aadharNumber + ", duplicates=" + duplicates + ", user=" + user
-                + "]";
+        return "Aadhar [id=" + id + ", aadharNumber=" + aadharNumber + ", duplicates=" + duplicates + ", status="
+                + status + ", issueDate=" + issueDate + ", user=" + user + "]";
     }
    
 }
