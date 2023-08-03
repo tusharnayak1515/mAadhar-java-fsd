@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                checkout scm
+                
+                sh 'npm install'
+                sh 'npm run build --prod'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                script {
+                    docker.build("maadhar-client-image:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage('Docker Deploy') {
+            steps {
+                script {
+                    docker.withRegistry('https://hub.docker.com/repository/docker/tusharnayak1515/demo-spring-docker', 'Tusharbinu1515@') {
+                        docker.image("maadhar-client-image:${env.BUILD_NUMBER}").push()
+                    }
+                }
+            }
+        }
+    }
+}
