@@ -2,8 +2,8 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY target/demo-0.0.1-SNAPSHOT.jar /app/demo-0.0.1-SNAPSHOT.jar
+COPY target/mAadhar-0.0.1-SNAPSHOT.jar /app/mAadhar-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8080
+EXPOSE 9000
 
-CMD ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "mAadhar-0.0.1-SNAPSHOT.jar"]
