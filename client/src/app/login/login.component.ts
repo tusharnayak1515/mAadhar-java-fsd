@@ -25,7 +25,12 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("user", JSON.stringify(response.user));
         this.error = '';
         this.setAuthCookie(response.token);
-        this.router.navigate(['user/dashboard']);
+        if(response?.user?.role === "admin") {
+          this.router.navigate(['admin/dashboard']);
+        }
+        else {
+          this.router.navigate(['user/dashboard']);
+        }
         this.userService.setIsLoggedIn(true);
         this.userService.setUser(response.user);
       }

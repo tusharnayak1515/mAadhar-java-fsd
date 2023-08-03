@@ -29,6 +29,10 @@ export class UserService {
     return this.http.post<User>(`${this.url}/api/auth/register`, user);
   };
 
+  public updateProfile = (user:User): Observable<User> => {
+    return this.http.put<User>(`${this.url}/api/auth/profile`, user);
+  };
+
   public uploadDp = (dp: FormData): Observable<User> => {
     return this.http.put<User>(`${this.url}/api/auth/upload`, dp);
   };

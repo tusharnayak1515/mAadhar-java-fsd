@@ -84,7 +84,7 @@ public class UserController {
         JwtResponse myresponse = new JwtResponse();
         User user = customUserDetailsService.findOne(jwtRequest.getMobile());
         UserResponse userResponse = new UserResponse(user.getCitizenId(), user.getName(), user.getEmail(),
-                user.getMobile(), user.getRole(), user.getAddress(), user.getDob(), user.getGender(), user.getDp());
+                user.getMobile(), user.getDob(), user.getAddress(), user.getGender(), user.getRole(), user.getDp());
         myresponse.setSuccess(true);
         myresponse.setUser(userResponse);
         myresponse.setToken(token);
@@ -94,7 +94,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request, HttpServletResponse response)
             throws Exception {
-        System.out.println("request: "+request.getPassword());
         User isUser = this.customUserDetailsService.findOne(request.getMobile());
         if (isUser != null) {
             JwtResponse myResponse = new JwtResponse();
@@ -131,7 +130,7 @@ public class UserController {
         response.addCookie(jwtCookie);
         JwtResponse myresponse = new JwtResponse();
         UserResponse userResponse = new UserResponse(user.getCitizenId(), user.getName(), user.getEmail(),
-                user.getMobile(), user.getRole(), user.getAddress(), user.getDob(), user.getGender(), user.getDp());
+                user.getMobile(), user.getDob(), user.getAddress(), user.getGender(), user.getRole(), user.getDp());
         myresponse.setSuccess(true);
         myresponse.setUser(userResponse);
         myresponse.setToken(token);
@@ -145,7 +144,7 @@ public class UserController {
         User user = this.customUserDetailsService.findOne(email);
         JwtResponse myresponse = new JwtResponse();
         UserResponse userResponse = new UserResponse(user.getCitizenId(), user.getName(), user.getEmail(),
-                user.getMobile(), user.getRole(), user.getAddress(), user.getDob(), user.getGender(), user.getDp());
+                user.getMobile(), user.getDob(), user.getAddress(), user.getGender(), user.getRole(), user.getDp());
         myresponse.setSuccess(true);
         myresponse.setUser(userResponse);
         return ResponseEntity.ok(myresponse);
@@ -165,11 +164,11 @@ public class UserController {
 
         Aadhar aadhar = this.aadharService.findAadharByCitizenId(user.getCitizenId());
 
-        aadhar.setStatus("pending");
+        aadhar.setStatus("applied");
         this.aadharService.saveAadhar(aadhar);
         JwtResponse myresponse = new JwtResponse();
         UserResponse userResponse = new UserResponse(user.getCitizenId(), user.getName(), user.getEmail(),
-                user.getMobile(), user.getRole(), user.getAddress(), user.getDob(), user.getGender(), user.getDp());
+                user.getMobile(), user.getDob(), user.getAddress(), user.getGender(), user.getRole(), user.getDp());
         myresponse.setSuccess(true);
         myresponse.setUser(userResponse);
         return ResponseEntity.ok(myresponse);
@@ -200,7 +199,7 @@ public class UserController {
 
         JwtResponse myresponse = new JwtResponse();
         UserResponse userResponse = new UserResponse(user.getCitizenId(), user.getName(), user.getEmail(),
-                user.getMobile(), user.getRole(), user.getAddress(), user.getDob(), user.getGender(), user.getDp());
+                user.getMobile(), user.getDob(), user.getAddress(), user.getGender(), user.getRole(), user.getDp());
         myresponse.setSuccess(true);
         myresponse.setUser(userResponse);
         return ResponseEntity.ok(myresponse);

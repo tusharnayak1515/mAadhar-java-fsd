@@ -62,9 +62,9 @@ public class AadharController {
 
         AadharList list = new AadharList();
 
+        list.setSuccess(true);
+        list.setError(null);
         for (Aadhar aadhar : aadharList) {
-            list.setSuccess(true);
-            list.setError(null);
             AadharUser aadharUser = new AadharUser();
             aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
             aadharUser.setName(aadhar.getUser().getName());
@@ -103,9 +103,9 @@ public class AadharController {
 
         AadharList list = new AadharList();
 
+        list.setSuccess(true);
+        list.setError(null);
         for (Aadhar aadhar : aadharList) {
-            list.setSuccess(true);
-            list.setError(null);
             AadharUser aadharUser = new AadharUser();
             aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
             aadharUser.setName(aadhar.getUser().getName());
@@ -144,9 +144,9 @@ public class AadharController {
 
         AadharList list = new AadharList();
 
+        list.setSuccess(true);
+        list.setError(null);
         for (Aadhar aadhar : aadharList) {
-            list.setSuccess(true);
-            list.setError(null);
             AadharUser aadharUser = new AadharUser();
             aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
             aadharUser.setName(aadhar.getUser().getName());
@@ -197,9 +197,9 @@ public class AadharController {
 
         AadharList list = new AadharList();
 
+        list.setSuccess(true);
+        list.setError(null);
         for (Aadhar item : aadharList) {
-            list.setSuccess(true);
-            list.setError(null);
             AadharUser aadharUser = new AadharUser();
             aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
             aadharUser.setName(aadhar.getUser().getName());
@@ -243,18 +243,18 @@ public class AadharController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(myResponse);
         }
 
-        aadhar.setDuplicates(aadhar.getDuplicates()+1);
+        aadhar.setDuplicates(aadhar.getDuplicates() + 1);
         aadhar.setStatus("approved");
 
         this.aadharService.saveAadhar(aadhar);
 
-        List<Aadhar> aadharList = this.aadharService.getAllAppliedAadharCardRequests();
+        List<Aadhar> aadharList = this.aadharService.getAllDuplicateAadharCardRequests();
 
         AadharList list = new AadharList();
 
+        list.setSuccess(true);
+        list.setError(null);
         for (Aadhar item : aadharList) {
-            list.setSuccess(true);
-            list.setError(null);
             AadharUser aadharUser = new AadharUser();
             aadharUser.setCitizenId(aadhar.getUser().getCitizenId());
             aadharUser.setName(aadhar.getUser().getName());
@@ -283,25 +283,43 @@ public class AadharController {
         User user = this.customUserDetailsService.findOne(email);
 
         Aadhar aadhar = this.aadharService.findAadharByCitizenId(user.getCitizenId());
-        AadharResponse myresponse = new AadharResponse();
-        myresponse.setSuccess(true);
-        myresponse.setError(null);
-        AadharUser aadharUser = new AadharUser();
-        aadharUser.setCitizenId(user.getCitizenId());
-        aadharUser.setName(user.getName());
-        aadharUser.setEmail(user.getEmail());
-        aadharUser.setMobile(user.getMobile());
-        aadharUser.setAddress(user.getAddress());
-        aadharUser.setDob(user.getDob());
-        aadharUser.setGender(user.getGender());
-        aadharUser.setDp(user.getDp());
-        aadharUser.setId(aadhar.getId());
-        aadharUser.setAadharNumber(aadhar.getAadharNumber());
-        aadharUser.setDuplicates(aadhar.getDuplicates());
-        aadharUser.setStatus(aadhar.getStatus());
-        aadharUser.setIssueDate(aadhar.getIssueDate());
-        myresponse.setAadhar(aadharUser);
-        return ResponseEntity.ok(myresponse);
+        if (aadhar == null) {
+            AadharResponse myresponse = new AadharResponse();
+            myresponse.setSuccess(true);
+            myresponse.setError(null);
+            AadharUser aadharUser = new AadharUser();
+            aadharUser.setCitizenId(user.getCitizenId());
+            aadharUser.setName(user.getName());
+            aadharUser.setEmail(user.getEmail());
+            aadharUser.setMobile(user.getMobile());
+            aadharUser.setAddress(user.getAddress());
+            aadharUser.setDob(user.getDob());
+            aadharUser.setGender(user.getGender());
+            aadharUser.setDp(user.getDp());
+            myresponse.setAadhar(aadharUser);
+            return ResponseEntity.ok(myresponse);
+        }
+        else {
+            AadharResponse myresponse = new AadharResponse();
+            myresponse.setSuccess(true);
+            myresponse.setError(null);
+            AadharUser aadharUser = new AadharUser();
+            aadharUser.setCitizenId(user.getCitizenId());
+            aadharUser.setName(user.getName());
+            aadharUser.setEmail(user.getEmail());
+            aadharUser.setMobile(user.getMobile());
+            aadharUser.setAddress(user.getAddress());
+            aadharUser.setDob(user.getDob());
+            aadharUser.setGender(user.getGender());
+            aadharUser.setDp(user.getDp());
+            aadharUser.setId(aadhar.getId());
+            aadharUser.setAadharNumber(aadhar.getAadharNumber());
+            aadharUser.setDuplicates(aadhar.getDuplicates());
+            aadharUser.setStatus(aadhar.getStatus());
+            aadharUser.setIssueDate(aadhar.getIssueDate());
+            myresponse.setAadhar(aadharUser);
+            return ResponseEntity.ok(myresponse);
+        }
     }
 
     @PostMapping("/myaadhar")
@@ -393,7 +411,7 @@ public class AadharController {
     @DeleteMapping("/{aadharId}")
     public ResponseEntity<?> deleteAadhar(@PathVariable Long aadharId) {
         Aadhar aadhar = aadharService.findById(aadharId);
-        if(aadhar == null) {
+        if (aadhar == null) {
             JwtResponse myResponse = new JwtResponse();
             myResponse.setSuccess(false);
             myResponse.setError("Aadhar card does not exist.");
@@ -405,9 +423,9 @@ public class AadharController {
 
         AadharList list = new AadharList();
 
+        list.setSuccess(true);
+        list.setError(null);
         for (Aadhar item : aadharList) {
-            list.setSuccess(true);
-            list.setError(null);
             AadharUser aadharUser = new AadharUser();
             aadharUser.setCitizenId(item.getUser().getCitizenId());
             aadharUser.setName(item.getUser().getName());

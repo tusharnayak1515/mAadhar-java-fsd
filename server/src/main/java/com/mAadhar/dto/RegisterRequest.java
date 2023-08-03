@@ -82,5 +82,11 @@ public class RegisterRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "RegisterRequest [name=" + name + ", email=" + email + ", mobile=" + mobile + ", address=" + address
+				+ ", dob=" + dob + ", gender=" + gender + ", password=" + password + "]";
+	}
 	
 }

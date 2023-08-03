@@ -1,1 +1,90 @@
-<p>admin-dashboard works!</p>
+<div class="container pt-5 pb-5">
+  <h3 *ngIf="allList?.length !== 0">All Aadhar users</h3>
+  <table class="table mb-5" *ngIf="allList?.length !== 0">
+    <thead>
+      <tr>
+        <th scope="col">Application ID</th>
+        <th scope="col">Citizen ID</th>
+        <th scope="col">Date of Application</th>
+        <th scope="col">Current Status</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of allList" scope="row">
+        <td>{{ item?.id }}</td>
+        <td>{{ item?.citizenId }}</td>
+        <td>{{ item?.issueDate }}</td>
+        <td>{{ item?.status }}</td>
+        <td>
+            <button class="btn btn-danger" (click)="deleteAadhar(item?.id)">
+              Delete
+            </button>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p
+    *ngIf="newList?.length === 0 && duplicateList?.length === 0"
+    class="h4 text-secondary"
+  >
+    No Applications
+  </p>
+
+  <h3 *ngIf="newList?.length !== 0">New Applications</h3>
+  <table class="table" *ngIf="newList?.length !== 0">
+    <thead>
+      <tr>
+        <th scope="col">Application ID</th>
+        <th scope="col">Citizen ID</th>
+        <th scope="col">Date of Application</th>
+        <th scope="col">Current Status</th>
+        <th scope="col">Type of Application</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of newList">
+        <td>{{ item?.id }}</td>
+        <td>{{ item?.citizenId }}</td>
+        <td>{{ item?.issueDate }}</td>
+        <td>{{ item?.status }}</td>
+        <td>Aadhar Card</td>
+        <td>
+          <button class="btn btn-success" (click)="approveNew(item?.id)">
+            Approve
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 *ngIf="duplicateList?.length !== 0">Duplicate Applications</h3>
+  <table class="table" *ngIf="duplicateList?.length !== 0">
+    <thead>
+      <tr>
+        <th scope="col">Application ID</th>
+        <th scope="col">Citizen ID</th>
+        <th scope="col">Date of Application</th>
+        <th scope="col">Current Status</th>
+        <th scope="col">Type of Application</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of duplicateList">
+        <td>{{ item?.id }}</td>
+        <td>{{ item?.citizenId }}</td>
+        <td>{{ item?.issueDate }}</td>
+        <td>{{ item?.status }}</td>
+        <td>Aadhar Card</td>
+        <td>
+          <button class="btn btn-success" (click)="approveDuplicate(item?.id)">
+            Approve
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

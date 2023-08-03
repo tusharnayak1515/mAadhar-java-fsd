@@ -35,11 +35,6 @@
             >Login</a
           >
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && userType === 'user'">
-          <a class="nav-link" routerLink="/user/profile" routerLinkActive="active"
-            >Profile</a
-          >
-        </li>
         <li class="nav-item" *ngIf="isLoggedIn">
             <a routerLink="#" class="nav-link" style="cursor: pointer" (click)="logoutUser()">
               Logout
