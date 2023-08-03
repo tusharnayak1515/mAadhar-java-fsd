@@ -3,6 +3,7 @@
     #loginForm="ngForm"
     (ngSubmit)="loginForm?.form?.valid && onLogin()"
     class="w-25 mx-auto"
+    id="loginForm"
   >
     <h4>Login</h4>
     <div class="my-3">
@@ -65,6 +66,7 @@
       {{ error }}
     </p>
     <button
+      id="loginBtn"
       type="submit"
       class="btn btn-primary w-100"
       [disabled]="loginForm?.form?.invalid"

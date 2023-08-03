@@ -33,7 +33,13 @@ public class AadharService {
 	}
 
     public void deleteAadhar(Long id) {
-        aadharRepo.deleteById(id);
+        Optional<Aadhar> aadharOptional = this.aadharRepo.findById(id);
+        if (aadharOptional.isPresent()) {
+            Aadhar aadhar = aadharOptional.get();
+            this.aadharRepo.delete(aadhar);
+        } else {
+            throw new IllegalArgumentException("Aadhar with ID " + id + " not found.");
+        }
     }
     
     public List<Aadhar> getAllAppliedAadharCardRequests() {
